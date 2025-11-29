@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no, interactive-widget=resizes-content"/>
-<title>Nova Eternity — Multilingual Free Edition</title>
+<title>Nova Eternity — Multilingual Mobile</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -72,7 +72,9 @@
 
   /* CHAT */
   .chat-scroll {
-    flex: 1; overflow-y: auto; padding: calc(65px + 30px + env(safe-area-inset-top)) 20px 140px 20px;
+    flex: 1; overflow-y: auto; 
+    /* Мобильный фикс: Высота шапки + padding сверху / Высота инпута + padding снизу */
+    padding: calc(65px + 30px + env(safe-area-inset-top)) 20px 140px 20px; 
     display: flex; flex-direction: column; gap: 24px; scroll-behavior: smooth; scrollbar-width: none;
   }
   .msg-group { 
@@ -417,10 +419,9 @@ async function send() {
         `${m.role.toUpperCase()}: ${m.text || (m.image ? "User attached an image. " : "")}`
     ).join('\n');
     
-    // ГЛАВНОЕ ИЗМЕНЕНИЕ: Инструкция, заставляющая отвечать на языке пользователя И генерировать промпт.
     const systemPrompt = `You are a multilingual, creative AI. Analyze the user's last request and chat history. 
     **ALWAYS respond in the language of the user's last message.**
-    1. IF the user asks to draw/generate an image: Create a single, highly aesthetic image prompt in English. Output ONLY: "!IMG: <your_prompt>"
+    1. IF the user asks to draw/generate an image (or modify an image by describing it, as you cannot see it): Create a single, highly aesthetic image prompt in English. Output ONLY: "!IMG: <your_prompt>"
     2. OTHERWISE, provide a helpful and creative text answer in the user's language.`;
 
     const fullPrompt = `${systemPrompt}\n\nCHAT HISTORY:\n${chatHistory}\n\nUSER'S LATEST REQUEST: ${txt}`;
